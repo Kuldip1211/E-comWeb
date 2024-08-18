@@ -1,6 +1,9 @@
-const Product = require("../models/Productcontroller");
 
-exports.createProducts = async (req, res) => {
+const Product = require("../models/Productcontroller");
+const ErrorHandler = require("../utils/errorhandle");
+const catchAsyncerror = require("../middleware/catchAsyncerror");
+
+exports.createProducts = catchAsyncerror(async (req, res) => {
   const pro = req.body;
 
   const product = await Product.create(pro);
@@ -9,7 +12,7 @@ exports.createProducts = async (req, res) => {
     success: true,
     product,
   });
-};
+});
 
 exports.getAllproduct = async (req, res) => {
   try {
@@ -28,7 +31,7 @@ exports.getAllproduct = async (req, res) => {
 };
 
 // update the products
-exports.updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res ,next) => {
   const productId = req.params.id;
   const updatedData = req.body;
 
@@ -39,7 +42,7 @@ exports.updateProduct = async (req, res) => {
   );
 
   if (!updatedProduct) {
-    return res.status(404).send("Product not found");
+    return next(new ErrorHandler("product not font" , 404))
   } else {
     res.json({
       success: true,
@@ -48,18 +51,36 @@ exports.updateProduct = async (req, res) => {
 };
 
 // delet the product
-exports.deletProduct = async (req, res) => {
+exports.deletProduct = async (req, res , next) => {
   const productId = req.params.id;
 
   const updatedProduct = await Product.findByIdAndDelete(productId);
 
   if (!updatedProduct) {
-    return res.status(404).send("Product not found");
-  } else {
+    return next(new ErrorHandler("product not font" , 404))
+  }
+
+
     res.json({
       success: true,
       updatedProduct
     });
-  }
+  
+
+};
+
+exports.detailProduct = async (req, res,next) => {
+  const productId = req.params.id;
+
+  const updatedProduct = await Product.findById(productId);
+
+  if (!updatedProduct) {
+    return next(new ErrorHandler("product not found" , 404))
+  } 
+    res.json({
+      success: true,
+      updatedProduct
+    });
+  
 };
 

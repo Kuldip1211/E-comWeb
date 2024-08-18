@@ -1,21 +1,24 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+require('dotenv').config({ path: './config/.env' });
 
-// Load environment variables from .env file
-dotenv.config({ path: './config/.env' });
-
-// Function to connect to the MongoDB database
-const connectDatabase = () => {
+const connectDatabase = async () => {
+  try {
     const dbURI = process.env.DB_URI;
     if (!dbURI) {
-        console.error('DB_URI environment variable is not set.');
-        return;
+      throw new Error('DB_URI environment variable is not set.');
     }
 
-    mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => console.log('MongoDB connected...'))
-        .catch(err => console.error('MongoDB connection error:', err));
+    const conn = await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      // Add other options as needed (e.g., connection pooling, retry)
+    });
+
+    console.log(`MongoDB connected:`);
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1); // Exit process with failure
+  }
 };
 
-// Export the function
 module.exports = connectDatabase;
