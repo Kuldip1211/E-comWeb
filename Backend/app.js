@@ -5,7 +5,7 @@ app.use(express.json());
 
 // import all routes
 const producturl = require("./routes/ProductRoutes.js")
-app.use("/api/v1",producturl);
+app.use("/api/v1/",producturl);
 
 // use middleware
 app.use(errorMiddleware)

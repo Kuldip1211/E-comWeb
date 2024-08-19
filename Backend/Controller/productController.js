@@ -2,6 +2,7 @@
 const Product = require("../models/Productcontroller");
 const ErrorHandler = require("../utils/errorhandle");
 const catchAsyncerror = require("../middleware/catchAsyncerror");
+const Apifecture = require("../utils/apifilter")
 
 exports.createProducts = catchAsyncerror(async (req, res) => {
   const pro = req.body;
@@ -17,7 +18,9 @@ exports.createProducts = catchAsyncerror(async (req, res) => {
 exports.getAllproduct = async (req, res) => {
   try {
     // Fetch all products from the database
-    const products = await Product.find();
+    const resultpages = 3;
+    const apiFeacture = new Apifecture(Product.find(),req.query).search().filter().pagination(resultpages);
+    const products = await apiFeacture.query;
     res.status(200).json({
       success: true,
       products,
