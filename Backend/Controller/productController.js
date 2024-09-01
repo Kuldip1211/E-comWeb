@@ -15,7 +15,7 @@ exports.createProducts = catchAsyncerror(async (req, res) => {
   });
 });
 
-exports.getAllproduct = async (req, res) => {
+exports.getAllproduct = catchAsyncerror(async (req, res) => {
   try {
     // Fetch all products from the database
     const resultpages = 3;
@@ -31,10 +31,10 @@ exports.getAllproduct = async (req, res) => {
       message: "Failed to fetch products",
     });
   }
-};
+});
 
 // update the products
-exports.updateProduct = async (req, res ,next) => {
+exports.updateProduct = catchAsyncerror(async (req, res ,next) => {
   const productId = req.params.id;
   const updatedData = req.body;
 
@@ -51,10 +51,10 @@ exports.updateProduct = async (req, res ,next) => {
       success: true,
     });
   }
-};
+});
 
 // delet the product
-exports.deletProduct = async (req, res , next) => {
+exports.deletProduct = catchAsyncerror(async (req, res , next) => {
   const productId = req.params.id;
 
   const updatedProduct = await Product.findByIdAndDelete(productId);
@@ -70,9 +70,9 @@ exports.deletProduct = async (req, res , next) => {
     });
   
 
-};
+});
 
-exports.detailProduct = async (req, res,next) => {
+exports.detailProduct =catchAsyncerror( async (req, res,next) => {
   const productId = req.params.id;
 
   const updatedProduct = await Product.findById(productId);
@@ -85,5 +85,5 @@ exports.detailProduct = async (req, res,next) => {
       updatedProduct
     });
   
-};
+});
 

@@ -1,13 +1,17 @@
 const express = require('express');
 const app = express();
 const errorMiddleware = require('./middleware/error.js');
+
 app.use(express.json());
 
-// import all routes
-const producturl = require("./routes/ProductRoutes.js")
-app.use("/api/v1/",producturl);
+// Import all routes
+const producturl = require("./routes/ProductRoutes.js");
+const user = require("./routes/Userroute.js");
 
-// use middleware
-app.use(errorMiddleware)
+app.use("/api/v1", producturl);
+app.use("/api/v1", user); // Consistent base path for all routes
+
+// Use middleware
+app.use(errorMiddleware);
 
 module.exports = app;
