@@ -53,4 +53,8 @@ userSchema.methods.getJWTToken = function(){
  })
 }
 
+userSchema.methods.comparePassword=async function(enterpassword){
+ return await(bcrypt.compare(enterpassword,this.password));
+}
+
 module.exports = mongoose.model("User", userSchema);
